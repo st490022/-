@@ -13,7 +13,7 @@ def write_forecast(forecast_df, current_level):
         cred = credentials.Certificate(cred_dict)
         # 替換為你的 Firebase 資料庫 URL
         firebase_admin.initialize_app(cred, {
-            "databaseURL": "https://dtrl-182a4-default-rtdb.asia-southeast1.firebasedatabase.app-default-rtdb.firebaseio.com/"
+            "databaseURL": "https://dtrl-182a4-default-rtdb.asia-southeast1.firebasedatabase.app/"
         })
 
     # 更新擁擠度分級狀態供 ESP32 讀取
