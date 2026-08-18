@@ -1,28 +1,23 @@
-import pandas as pd
 from fetch_weather import fetch_weather
-from predict import build_and_predict
-from write_firebase import write_forecast
+from fetch_tdx import fetch_tdx
+from predict import run_prediction
+from write_firebase import save_to_firebase
 
 def main():
-    print("1. 擷取 CWA 天氣資料...")
-    weather_info = fetch_weather()
-
-    print("2. 訓練 Prophet 模型並生成預測...")
-    history_df = pd.DataFrame() 
-    forecast_df = build_and_predict(history_df, weather_info)
-
-    # 計算未來最新預測數值並分級
-    latest_yhat = forecast_df.iloc[-1]["yhat"]
-    if latest_yhat > 100:
-        level = "high"
-    elif latest_yhat > 50:
-        level = "medium"
-    else:
-        level = "low"
-
-    print(f"3. 寫入 Firebase (當前預測等級: {level})...")
-    write_forecast(forecast_df, level)
-    print("AI 預測與雲端更新順利完成！")
+    print("🚀 開始執行全自動預測 Pipeline...")
+    
+    # Step 1: 抓取外部數據
+    weather_data = fetch_weather()
+    tdx_data = fetch_tdx()
+    
+    # Step 2: 整理歷史數據並交給 Prophet 模型預測
+    # （這裡模擬載入訓練數據，實際可換成你的資料庫歷史數據）
+    sample_history = [{'ds': '2026-08-18 10:00:00', 'y': 15}, {'ds': '2026-08-18 11:00:00', 'y': 25}]
+    predictions = run_prediction(sample_history)
+    
+    # Step 3: 將 AI 結果存回 Firebase 供前端網頁顯示
+    save_to_firebase(predictions)
+    print("🎉 全套流程執行完成！")
 
 if __name__ == "__main__":
     main()
